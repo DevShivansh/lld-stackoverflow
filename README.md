@@ -26,3 +26,73 @@ Members can vote to delete extremely off-topic or very low-quality questions.
 Moderators can close a question or undelete an already deleted question.
 
 The system should also be able to identify most frequently used tags in the questions.
+
+
+Vote{
+Long ElementID
+VoteType
+
+}->QuestionUpVote, QuestionCloseVote, CommentUpVote, OffTopicVote, LowQualityQuestionVote
+
+User{
+
+
+
+} -> Guest, Member, Moderator
+
+Moderator extends User{
+
+}
+
+Member extends User{
+
+Badges
+
+}
+
+Element{
+
+Votes
+
+Flags
+
+}-> Question, Answer, Comment
+
+Question{
+
+-QuestionState{OPEN, CLOSED, DELETED}
+
+-Bounty
+
+}
+
+
+
+
+QuestionService{
+
+	List<Element> searchQ(String query, Set<String> tags);
+	
+	void addTagsToQuestion(Long userID, Long quesID, Set<String> tags)
+
+	Element viewQuestion(Long quesID);
+	
+	Element postQuestion(Long userID, CreateQuesRequest req);
+	
+	Element answerQuestion(Long userID, AnsQuestionRequest req);
+	
+	Element changeQuestionState(Long userID, Long quesID, QuestionState);
+}
+
+CommentService{
+
+	Element commentOn(Long userID, Long elementID);
+
+}
+
+
+VoteService{
+
+	void vote(Long userID, Long elementID, VoteType type);
+
+}
